@@ -1,0 +1,19 @@
+{
+    "mailers": [
+        {
+            "transport": "smtp",
+            "host": "localhost",
+            "user": "me@example.com",
+            "password": ""
+        }
+    ],
+    "environments": {
+        "dev": {
+            "debug": true
+        }, "prod": {
+            "debug": false
+        }, "test": {
+            "debug": true
+        }
+    }
+}
