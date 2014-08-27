@@ -1,4 +1,6 @@
 {
+    "tryme": [
+    ],
     "driver": "mysql",
     "host": "localhost",
     "port": 3306,

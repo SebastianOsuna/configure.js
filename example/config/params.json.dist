@@ -4,7 +4,15 @@
             "transport": "smtp",
             "host": "localhost",
             "user": "me@example.com",
-            "password": ""
+            "password": "",
+            "tryme": {
+                "attr1": "h!",
+                "tryme_deeper": [
+                    {
+                        "deeper": ""
+                    }
+                ]
+            }
         }
     ],
     "environments": {

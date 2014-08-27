@@ -62,23 +62,27 @@ function setup() {
             var configure = require( "../lib/configure" )( relativePath );
             var files = configure.listConfigFiles();
             process.stdout.write( "Found " + files.length + " config file(s).\r\n\r\n" );
-            var c = 0,   // current file index
-                task = function () {    // file handling function
+            if ( files.length > 0 ) {
+                var c = 0,   // current file index
+                    task = function () {    // file handling function
                         var filename = files[ c ],    // current file
-                            config = configure.handleFile( filename );     // current config object
+                            config = configure.handleFile(filename);     // current config object
 
                         // recursive config handling
-                        handleConfigEntry( config.defaults, config.values, config.name, function () {
-                            configure.writeFile( config );     // write file when done
+                        handleConfigEntry(config.defaults, config.values, config.name, function () {
+                            configure.writeFile(config);     // write file when done
                             c++;
-                            if( c < files.length ) {
+                            if (c < files.length) {
                                 task();    // continue with next file
-                            } else{
+                            } else {
                                 process.exit();    // done :)
                             }
-                        } );
-                };
+                        });
+                    };
                 task();
+            } else {
+                process.exit();    // nothing to do :(
+            }
         } catch ( e ) {
 
             // invalid directory, probably
@@ -113,6 +117,35 @@ function handleConfigEntry ( defaults, values, parent_name, cb ) {
                     c++;
                     cont();    // continue
                 } );
+            } else if ( entry instanceof Array ) {    // support for arrays
+                var array = values[ key ] = [],
+                    _proto = defaults[ key ][ 0 ];
+                if ( _proto ) {
+                    var array_handler = function ( num ) {
+                        num = parseInt( num );
+                        if( num ) {    // this makes sure num > 0
+                            var cc = -1;
+                            var array_item_handler = function () {
+                                cc++;
+                                if( cc < num ) {
+                                    array.push( {} );
+                                    var i = array[ array.length - 1 ];
+                                    handleConfigEntry( _proto, i,  ( parent_name ? parent_name + "." + key : key ) + "." + cc, array_item_handler );
+                                } else {
+                                    c++;
+                                    cont();    // done with the array
+                                }
+                            };
+                            array_item_handler();    // begin with the array
+                        } else {
+                            ask( "Number of entries for " + ( parent_name ? parent_name + "." + key : key ) + " ? ", array_handler );
+                        }
+                    };
+                    ask( "Number of entries for " + ( parent_name ? parent_name + "." + key : key ) + " ? ", array_handler );
+                } else {
+                    c++;
+                    cont();
+                }
             } else {
                 // TODO: Handle arrays
                 values[ key ] = {};
