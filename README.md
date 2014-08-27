@@ -1,7 +1,8 @@
 TODO:
 
 - Support for arrays
-- Documentation (README + code)
+- Add skip/ignore parameters
+- Documentation (README)
 - npmignore
 - publish to npm
 - test as dependency.
