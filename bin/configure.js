@@ -59,7 +59,7 @@ function ask( question, callback ) {
 function setup() {
 
     // ask for config directory
-    ask( "Where are your config files? (relative to " + process.cwd() + ")  ", function( relativePath ) {
+    ask( "Where are your config files? (relative to " + __dirname + ")  ", function( relativePath ) {
         try {
 
             // read ignore flag
@@ -98,7 +98,7 @@ function setup() {
         } catch ( e ) {
 
             // invalid directory, probably
-            process.stdout.write( e.message + "\r\n" );
+            process.stdout.write( e.message.red + "\r\n" );
             setup();
         }
     } );
