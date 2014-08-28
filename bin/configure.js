@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+var path = require( "path" );
 require( "colors" );
 
 /**
@@ -59,7 +60,7 @@ function ask( question, callback ) {
 function setup() {
 
     // ask for config directory
-    ask( "Where are your config files? (relative to " + __dirname + ")  ", function( relativePath ) {
+    ask( "Where are your config files? (relative to " + path.resolve( path.normalize( "." ) ) + ")  ", function( relativePath ) {
         try {
 
             // read ignore flag
