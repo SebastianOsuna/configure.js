@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SebastianOsuna/configurejs"
+    "url": "https://github.com/SebastianOsuna/configure.js"
   },
   "keywords": [
     "config",
@@ -24,6 +24,6 @@
   },
   "homepage": "https://github.com/SebastianOsuna/configurejs",
   "dependencies": {
-    "commander": ""
+    "colors": ""
   }
 }

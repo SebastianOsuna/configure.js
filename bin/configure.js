@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
+require( "colors" );
+
 /**
  * Command line arguments.
  */
 var action = process.argv[2],
-    _ask = process.argv[3] === "--ask";
+    _ask = process.argv.indexOf( "--ask" ) !== -1,
+    ignore_index = process.argv.indexOf( "--ignore" ),
+    _ignore = ignore_index !== -1;
 
 // input encoding
 process.stdin.setEncoding('utf8');
@@ -58,10 +62,18 @@ function setup() {
     ask( "Where are your config files? (relative to " + process.cwd() + ")  ", function( relativePath ) {
         try {
 
+            // read ignore flag
+            var ignore_list = false;
+            if( _ignore ) {
+                ignore_list = ( process.argv[ ignore_index + 1 ] ?
+                    process.argv[ ignore_index + 1 ].split( "," ).map( function ( i ) { return i.trim(); } ) :
+                    process.argv[ ignore_index + 1 ] );
+            }
+
             // require module
-            var configure = require( "../lib/configure" )( relativePath );
+            var configure = require( "../lib/configure" )( relativePath, ignore_list );
             var files = configure.listConfigFiles();
-            process.stdout.write( "Found " + files.length + " config file(s).\r\n\r\n" );
+            process.stdout.write( ("Found " + files.length + " config file(s).\r\n\r\n").yellow );
             if ( files.length > 0 ) {
                 var c = 0,   // current file index
                     task = function () {    // file handling function
@@ -69,7 +81,7 @@ function setup() {
                             config = configure.handleFile(filename);     // current config object
 
                         // recursive config handling
-                        handleConfigEntry(config.defaults, config.values, config.name, function () {
+                        handleConfigEntry(config.defaults, config.values, config.name.green, function () {
                             configure.writeFile(config);     // write file when done
                             c++;
                             if (c < files.length) {
@@ -109,7 +121,7 @@ function handleConfigEntry ( defaults, values, parent_name, cb ) {
             var key = entries[ c ],
                 entry = defaults[ key ];
             if ( typeof entry === "string" || typeof entry === "number" || typeof entry === "boolean" || entry == undefined ) {
-                ask( ( parent_name ? parent_name + "." + key : key ) + " (" + entry + "): ", function ( newValue ) {
+                ask( ( parent_name ? parent_name + "." + key.blue : key.blue ) + " (" + entry.toString().yellow + "): ", function ( newValue ) {
                     if ( newValue === "" ) {
                         newValue = defaults[ key ];
                     }
@@ -138,16 +150,15 @@ function handleConfigEntry ( defaults, values, parent_name, cb ) {
                             };
                             array_item_handler();    // begin with the array
                         } else {
-                            ask( "Number of entries for " + ( parent_name ? parent_name + "." + key : key ) + " ? ", array_handler );
+                            ask( "Number of entries for " + ( parent_name ? parent_name + "." + key.blue : key.blue ) + " ? ", array_handler );
                         }
                     };
-                    ask( "Number of entries for " + ( parent_name ? parent_name + "." + key : key ) + " ? ", array_handler );
+                    ask( "Number of entries for " + ( parent_name ? parent_name + "." + key.blue : key.blue ) + " ? ", array_handler );
                 } else {
                     c++;
                     cont();
                 }
             } else {
-                // TODO: Handle arrays
                 values[ key ] = {};
 
                 // recurse down the object
