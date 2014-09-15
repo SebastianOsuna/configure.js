@@ -60,7 +60,7 @@ function ask( question, callback ) {
 function setup() {
 
     // ask for config directory
-    ask( "Where are your config files? (relative to " + path.resolve( path.normalize( process.cwd() ) ) + ")  ", function( relativePath ) {
+    ask( "Where are your config files? ", function( c_path ) {
         try {
 
             // read ignore flag
@@ -72,7 +72,7 @@ function setup() {
             }
 
             // require module
-            var configure = require( "../lib/configure" )( relativePath, ignore_list );
+            var configure = require( "../lib/configure" )( c_path, ignore_list );
             var files = configure.listConfigFiles();
             process.stdout.write( ("Found " + files.length + " config file(s).\r\n\r\n").yellow );
             if ( files.length > 0 ) {
