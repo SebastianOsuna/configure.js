@@ -99,7 +99,7 @@ function setup() {
         } catch ( e ) {
 
             // invalid directory, probably
-            process.stdout.write( e.message.red + "\r\n" );
+            process.stdout.write( ( e.message || e ).red + "\r\n" );
             setup();
         }
     } );
