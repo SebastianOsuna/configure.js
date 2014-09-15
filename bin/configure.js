@@ -33,7 +33,7 @@ if ( action === "setup") {
         setup();
     }
 } else {
-    process.stdout.write( "Unknown action" );
+    process.stdout.write( "Unknown action\r\n".red );
 }
 
 /**
@@ -60,7 +60,7 @@ function ask( question, callback ) {
 function setup() {
 
     // ask for config directory
-    ask( "Where are your config files? (relative to " + path.resolve( path.normalize( "." ) ) + ")  ", function( relativePath ) {
+    ask( "Where are your config files? (relative to " + path.resolve( path.normalize( process.cwd() ) ) + ")  ", function( relativePath ) {
         try {
 
             // read ignore flag
