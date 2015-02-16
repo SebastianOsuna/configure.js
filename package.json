@@ -4,9 +4,7 @@
   "description": "Manage your node.js project's config files Symfony style.",
   "main": "index.js",
   "directories": {},
-  "scripts": {
-    "postinstall": "node bin/configure setup --ask"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/SebastianOsuna/configure.js"
