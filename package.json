@@ -1,6 +1,6 @@
 {
   "name": "configurejs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Manage your node.js project's config files Symfony style.",
   "main": "index.js",
   "directories": {},
