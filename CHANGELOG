@@ -1,0 +1,5 @@
+# 0.0.2
+
+- Changed how the configuration directory path is asked.
+- Added `--config` option to provide the configuration directory.
+- Improved error handling if directory is not valid.
